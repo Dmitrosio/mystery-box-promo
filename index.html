@@ -29,14 +29,20 @@
       const name = document.getElementById('name').value;
       const address = document.getElementById('address').value;
 
-      const res = await fetch('https://script.google.com/a/macros/wolfriverelectric.com/s/AKfycbzix2FfANeyErWH4JQ05RKaNApa1d6fgjs1K4aAWc9fkGxXUnZN5bvJHwLEr2HWn8tB/exec?name=' + encodeURIComponent(name) + '&address=' + encodeURIComponent(address));
-
-      const data = await res.json();
-
-      if (res.ok) {
-        result.textContent = `🎉 You won: ${data.promo.promo} (Code: ${data.promo.code})`;
-      } else {
-        result.textContent = `⚠️ ${data.error}`;
+      try {
+        const res = await fetch('https://script.google.com/a/macros/wolfriverelectric.com/s/AKfycbzix2FfANeyErWH4JQ05RKaNApa1d6fgjs1K4aAWc9fkGxXUnZN5bvJHwLEr2HWn8tB/exec?name=' + encodeURIComponent(name) + '&address=' + encodeURIComponent(address));
+        
+        // Check if the response is ok
+        if (!res.ok) {
+          const data = await res.json();
+          result.textContent = `⚠️ ${data.error}`;
+        } else {
+          const data = await res.json();
+          result.textContent = `🎉 You won: ${data.promo} (Code: ${data.promo})`; // Since the response is just a string, handle it accordingly
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        result.textContent = '⚠️ Something went wrong, please try again later.';
       }
     });
   </script>
