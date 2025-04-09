@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mystery Box Promo</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding-top: 50px; }
+    input { margin: 5px; padding: 8px; width: 200px; }
+    button { padding: 10px 20px; margin-top: 10px; }
+    #result { margin-top: 20px; font-size: 1.2em; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>🎁 Open Your Mystery Box!</h1>
+  <form id="spinForm">
+    <input type="text" id="name" placeholder="Customer Name" required />
+    <input type="text" id="address" placeholder="Customer Address" required />
+    <button type="submit">Open Box</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById('spinForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      result.textContent = "Spinning the box... 🎲";
+
+      const name = document.getElementById('name').value;
+      const address = document.getElementById('address').value;
+
+      const res = await fetch(`/api/spin?name=${encodeURIComponent(name)}&address=${encodeURIComponent(address)}`);
+      const data = await res.json();
+
+      if (res.ok) {
+        result.textContent = `🎉 You won: ${data.promo.promo} (Code: ${data.promo.code})`;
+      } else {
+        result.textContent = `⚠️ ${data.error}`;
+      }
+    });
+  </script>
+</body>
+</html>
