@@ -23,28 +23,23 @@
     const result = document.getElementById('result');
 
     form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      result.textContent = "Spinning the box... 🎲";
+  e.preventDefault();
+  result.textContent = "Spinning the box... 🎲";
 
-      const name = document.getElementById('name').value;
-      const address = document.getElementById('address').value;
+  const name = document.getElementById('name').value;
+  const address = document.getElementById('address').value;
 
-      try {
-        const res = await fetch('https://script.google.com/macros/s/AKfycbz44R7SaxOxmo0BfM1xj0IwCBGRNGEWqqnRkTH6Nhd2ESUybLjIrChGEEqnvLD2Y2QN/exec?name=' + encodeURIComponent(name) + '&address=' + encodeURIComponent(address));
-        
-        // Check if the response is ok
-        if (!res.ok) {
-          const data = await res.json();
-          result.textContent = `⚠️ ${data.error}`;
-        } else {
-          const data = await res.json();
-          result.textContent = `🎉 You won: ${data.promo} (Code: ${data.promo})`; // Since the response is just a string, handle it accordingly
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        result.textContent = '⚠️ Something went wrong, please try again later.';
-      }
-    });
+  const res = await fetch(`https://script.google.com/macros/s/AKfycbz44R7SaxOxmo0BfM1xj0IwCBGRNGEWqqnRkTH6Nhd2ESUybLjIrChGEEqnvLD2Y2QN/exec?name=${encodeURIComponent(name)}&address=${encodeURIComponent(address)}`);
+
+  const data = await res.json();
+
+  if (res.ok) {
+    result.textContent = `🎉 You won: ${data.promo} (Code: ${data.code})`;
+  } else {
+    result.textContent = `⚠️ ${data.error}`;
+  }
+});
+
   </script>
 </body>
 </html>
