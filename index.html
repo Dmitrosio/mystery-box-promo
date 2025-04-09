@@ -29,7 +29,7 @@
       const name = document.getElementById('name').value;
       const address = document.getElementById('address').value;
 
-      const res = await fetch('https://script.google.com/a/macros/wolfriverelectric.com/s/AKfycbzix2FfANeyErWH4JQ05RKaNApa1d6fgjs1K4aAWc9fkGxXUnZN5bvJHwLEr2HWn8tB/exec' + encodeURIComponent(name) + '&address=' + encodeURIComponent(address));
+      const res = await fetch('https://script.google.com/a/macros/wolfriverelectric.com/s/AKfycbzix2FfANeyErWH4JQ05RKaNApa1d6fgjs1K4aAWc9fkGxXUnZN5bvJHwLEr2HWn8tB/exec?name=' + encodeURIComponent(name) + '&address=' + encodeURIComponent(address));
 
       const data = await res.json();
 
