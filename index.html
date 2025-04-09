@@ -30,7 +30,7 @@
       const address = document.getElementById('address').value;
 
       try {
-        const res = await fetch('https://script.google.com/a/macros/wolfriverelectric.com/s/AKfycbyYWjCcLul_B6vqCtgOsY5N-ysO8LqU6EIemK2e_XjI9OfR9YRMXMdU6mFR9k02A9_H/exec?name' + encodeURIComponent(name) + '&address=' + encodeURIComponent(address));
+        const res = await fetch('https://script.google.com/macros/s/AKfycbyYWjCcLul_B6vqCtgOsY5N-ysO8LqU6EIemK2e_XjI9OfR9YRMXMdU6mFR9k02A9_H/exec?name' + encodeURIComponent(name) + '&address=' + encodeURIComponent(address));
         
         // Check if the response is ok
         if (!res.ok) {
