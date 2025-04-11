@@ -8,8 +8,17 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
-    "animejs": "^4.0.1"
-  }
+    "animejs": "^4.0.1",
+    "express": "^5.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dmitrosio/mystery-box-promo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Dmitrosio/mystery-box-promo/issues"
+  },
+  "homepage": "https://github.com/Dmitrosio/mystery-box-promo#readme",
+  "description": ""
 }
