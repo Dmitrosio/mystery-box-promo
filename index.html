@@ -18,21 +18,40 @@
     <button type="submit">Open Box</button>
   </form>
   <div id="result"></div>
-
-  <div class="box"></div>
-  <button onclick="animateBox()">Animate</button>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <img id="mysteryBox" src="public/mystery_box.png" alt="Mystery Box" style="width:150px; position:absolute; top:300px; left:50px; cursor:grab;">
   <script>
-    function animateBox() {
+    const box = document.getElementById('mysteryBox');
+    let isDragging = false;
+    let offset = { x: 0, y: 0 };
+  
+    box.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      offset.x = e.clientX - box.offsetLeft;
+      offset.y = e.clientY - box.offsetTop;
+      box.style.cursor = 'grabbing';
+    });
+  
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      box.style.cursor = 'grab';
+    });
+  
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+  
+      const x = e.clientX - offset.x;
+      const y = e.clientY - offset.y;
+  
       anime({
-        targets: 'h1',
-        translateX: 250,
-        rotate: '1turn',
-        duration: 1000
+        targets: box,
+        left: `${x}px`,
+        top: `${y}px`,
+        duration: 100,
+        easing: 'linear'
       });
-    }
+    });
   </script>
+  
 
   <script>
     const form = document.getElementById('spinForm');
