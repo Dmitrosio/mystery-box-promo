@@ -22,16 +22,31 @@
   <script>
     const box = document.getElementById('mysteryBox');
     let isDragging = false;
-    let offset = { x: 0, y: 0 };
+    let startX, startY;
+    let currentX = 0, currentY = 0;
+  
+    const snapTo = (val, gridSize) => Math.round(val / gridSize) * gridSize;
   
     box.addEventListener('mousedown', (e) => {
       isDragging = true;
-      offset.x = e.clientX - box.offsetLeft;
-      offset.y = e.clientY - box.offsetTop;
+      startX = e.clientX - currentX;
+      startY = e.clientY - currentY;
       box.style.cursor = 'grabbing';
     });
   
     document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        // Snap on release
+        currentX = snapTo(currentX, 100);
+        currentY = snapTo(currentY, 50);
+        anime({
+          targets: box,
+          translateX: currentX,
+          translateY: currentY,
+          duration: 600,
+          easing: 'easeOutElastic(1, .5)'
+        });
+      }
       isDragging = false;
       box.style.cursor = 'grab';
     });
@@ -39,18 +54,18 @@
     document.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
   
-      const x = e.clientX - offset.x;
-      const y = e.clientY - offset.y;
+      currentX = e.clientX - startX;
+      currentY = e.clientY - startY;
   
       anime({
         targets: box,
-        left: `${x}px`,
-        top: `${y}px`,
-        duration: 100,
-        easing: 'linear'
+        translateX: currentX,
+        translateY: currentY,
+        duration: 0,
       });
     });
   </script>
+  
   
 
   <script>
