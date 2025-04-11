@@ -19,6 +19,21 @@
   </form>
   <div id="result"></div>
 
+  <div class="box"></div>
+  <button onclick="animateBox()">Animate</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script>
+    function animateBox() {
+      anime({
+        targets: '.box',
+        translateX: 250,
+        rotate: '1turn',
+        duration: 1000
+      });
+    }
+  </script>
+
   <script>
     const form = document.getElementById('spinForm');
     const result = document.getElementById('result');
