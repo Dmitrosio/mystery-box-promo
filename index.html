@@ -17,7 +17,9 @@
     <button type="submit">Open Box</button>
   </form>
   <div id="result"></div>
-  <img id="mysteryBox" src='public/mysteryBox.png' alt="Mystery Box" style="cursor:grab;">
+  <div id="mysteryBox-holder" style="width: 300px; height: 300px; margin: auto; position: relative; overflow: hidden;">
+    <img id="mysteryBox" src="https://via.placeholder.com/300" alt="Mystery Box" style="width: 100%; height: auto; position: absolute; top: 0; left: 0;">
+  </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
   <script>
     const box = document.getElementById('mysteryBox');
