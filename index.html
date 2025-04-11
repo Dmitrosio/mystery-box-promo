@@ -3,10 +3,40 @@
 <head>
   <title>Mystery Box Promo</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding-top: 50px; }
-    input { margin: 5px; padding: 8px; width: 200px; }
-    button { padding: 10px 20px; margin-top: 10px; }
-    #result { margin-top: 20px; font-size: 1.2em; font-weight: bold; }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+    input {
+      margin: 5px;
+      padding: 8px;
+      width: 200px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    #mysteryBox-holder {
+      width: 300px;
+      height: 300px;
+      margin: auto;
+      position: relative;
+      overflow: hidden;
+    }
+    #mysteryBox {
+      width: 100%;
+      height: auto;
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: grab;
+    }
   </style>
 </head>
 <body>
@@ -16,81 +46,91 @@
     <input type="text" id="address" placeholder="Customer Address" required />
     <button type="submit">Open Box</button>
   </form>
+
   <div id="result"></div>
-  <div id="mysteryBox-holder" style="width: 300px; height: 300px; margin: auto; position: relative; overflow: hidden;">
-  </div>
+
+  <div id="mysteryBox-holder"></div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
   <script>
-    const box = document.getElementById('mysteryBox');
-    let isDragging = false;
-    let startX, startY;
-    let currentX = 0, currentY = 0;
-  
-    const snapTo = (val, gridSize) => Math.round(val / gridSize) * gridSize;
-  
-    box.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      startX = e.clientX - currentX;
-      startY = e.clientY - currentY;
-      box.style.cursor = 'grabbing';
-    });
-  
-    document.addEventListener('mouseup', () => {
-      if (isDragging) {
-        // Snap on release
-        currentX = snapTo(currentX, 100);
-        currentY = snapTo(currentY, 50);
+    document.addEventListener('DOMContentLoaded', () => {
+      const img = document.createElement('img');
+      img.src = 'https://via.placeholder.com/300'; // Replace with your image URL if needed
+      img.id = 'mysteryBox';
+      img.alt = 'Mystery Box';
+
+      const holder = document.getElementById('mysteryBox-holder');
+      holder.appendChild(img);
+
+      let isDragging = false;
+      let startX, startY;
+      let currentX = 0, currentY = 0;
+
+      const snapTo = (val, gridSize) => Math.round(val / gridSize) * gridSize;
+
+      img.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX - currentX;
+        startY = e.clientY - currentY;
+        img.style.cursor = 'grabbing';
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (isDragging) {
+          currentX = snapTo(currentX, 100);
+          currentY = snapTo(currentY, 50);
+          anime({
+            targets: img,
+            translateX: currentX,
+            translateY: currentY,
+            duration: 600,
+            easing: 'easeOutElastic(1, .5)'
+          });
+        }
+        isDragging = false;
+        img.style.cursor = 'grab';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+
+        currentX = e.clientX - startX;
+        currentY = e.clientY - startY;
+
         anime({
-          targets: box,
+          targets: img,
           translateX: currentX,
           translateY: currentY,
-          duration: 600,
-          easing: 'easeOutElastic(1, .5)'
+          duration: 0,
         });
-      }
-      isDragging = false;
-      box.style.cursor = 'grab';
-    });
-  
-    document.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-  
-      currentX = e.clientX - startX;
-      currentY = e.clientY - startY;
-  
-      anime({
-        targets: box,
-        translateX: currentX,
-        translateY: currentY,
-        duration: 0,
       });
     });
   </script>
-  
-  
 
   <script>
     const form = document.getElementById('spinForm');
     const result = document.getElementById('result');
 
     form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  result.textContent = "Spinning the box... 🎲";
+      e.preventDefault();
+      result.textContent = "Spinning the box... 🎲";
 
-  const name = document.getElementById('name').value;
-  const address = document.getElementById('address').value;
+      const name = document.getElementById('name').value;
+      const address = document.getElementById('address').value;
 
-  const res = await fetch(`https://script.google.com/macros/s/AKfycbz44R7SaxOxmo0BfM1xj0IwCBGRNGEWqqnRkTH6Nhd2ESUybLjIrChGEEqnvLD2Y2QN/exec?name=${encodeURIComponent(name)}&address=${encodeURIComponent(address)}`);
+      try {
+        const res = await fetch(`https://script.google.com/macros/s/AKfycbz44R7SaxOxmo0BfM1xj0IwCBGRNGEWqqnRkTH6Nhd2ESUybLjIrChGEEqnvLD2Y2QN/exec?name=${encodeURIComponent(name)}&address=${encodeURIComponent(address)}`);
+        const data = await res.json();
 
-  const data = await res.json();
-
-  if (res.ok) {
-    result.textContent = `🎉 You won: ${data.promo} (Code: ${data.code})`;
-  } else {
-    result.textContent = `⚠️ ${data.error}`;
-  }
-});
-
+        if (res.ok) {
+          result.textContent = `🎉 You won: ${data.promo} (Code: ${data.code})`;
+        } else {
+          result.textContent = `⚠️ ${data.error}`;
+        }
+      } catch (err) {
+        result.textContent = `❌ Something went wrong. Try again later.`;
+      }
+    });
   </script>
 </body>
 </html>
